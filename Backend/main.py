@@ -29,5 +29,5 @@ def add_item(item : Item):
 
 @app.post("/orders")
 def order_item(prodId : int ):
-    orders.append(items[id])
+    orders.append(items[prodId])
     return orders
