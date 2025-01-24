@@ -12,7 +12,10 @@ items = [
             {"prodId": 3, "name": "Grapes", "quantity" : 5, "price" : 22},
             {"prodId": 4, "name": "Grapes", "quantity" : 5, "price" : 22},
         ]
-orders = []
+
+orders = [
+            {"prodId": 1, "name": "Apple", "quantity" : 2, "price" : 22},
+         ]
 
 class Item(BaseModel):
     prodId: int = None
@@ -34,6 +37,35 @@ def add_item(item : Item):
     return items
 
 @app.post("/order")
-def order_item(prodId : int ):
-    orders.append(items[prodId])
-    return orders
+def order_item(prodId: int = 3):
+    # Find the item in the items list
+    for item in items:
+        if item["prodId"] == prodId:
+            # Check if there is enough quantity to order
+            if item["quantity"] != 0:
+                # Decrement the quantity of the item
+                item["quantity"] -= 1
+                
+                for order in orders:
+                    if order["prodId"] == prodId:
+                        order["quantity"] += 1
+                        order["price"] = item["price"] * order["quantity"]
+                        return {"message": "Order successful", "orders": orders}
+                    
+                    # Add the ordered item to the orders list
+                    ordered_item = {
+                        "prodId": item["prodId"],
+                        "name": item["name"],
+                        "quantity": order["quantity"] + 1,
+                        "price": item["price"] * 1  # Calculate total price for the order
+                        }
+                orders.append(ordered_item)
+                return {"message": "Order successful", "order": ordered_item}
+            else:
+                return {"error": "Insufficient quantity available"}
+    
+    return {"error": "Item not found"}
+
+@app.get("/orders")
+def get_items(request: Request):
+    return templates.TemplateResponse("Orders.html", {"request": request,  "orders": orders})

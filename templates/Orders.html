@@ -7,7 +7,6 @@
     <title>Shopping Cart System</title>
 </head>
 <body>
-
     <nav class="navbar navbar-expand navbar-light px-4 " style="background-color: #e3f2fd;">
         <a class="navbar-brand" >
             <img src="https://png.pngtree.com/element_our/20190531/ourmid/pngtree-shopping-cart-convenient-icon-image_1287807.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -28,12 +27,33 @@
         </div>
       </nav>
 
-      <div class="container mt-4">
+      <div class="container">
+        <h2 class="my-4">Orders</h2>
+        
+      <div class="row  justify-content-center">
+        <div class="col-6">
+            <ul class="list-group list-group-flush mt-4 ">
+                 <li class="list-group-item d-flex justify-content-between bg-light">
+                    <h4 >Item</h4>
+                    <h4>Quantity</h4>
+                    <h4>Price</h4>
+                </li>
+                {% for item in orders %}
+                <li class="list-group-item d-flex justify-content-between py-2 bg-light">
+                    <h6>{{ item.name }}</h6>
+                    <p>{{ item.quantity }}</p>
+                    <h6>${{ item.price }}</h6>
+                </li>
+                {% endfor %}
+              </ul>
+        </div>
+      </div>
 
-            <h1 class="display-1 text-center">Welcome</h1>
-            <h3 class="text-center">to</h3>
-            <h1 class="display-1 text-center">Shopping Cart System</h1>
+
+
+      </div>
+
+     
     
-</div>
 </body>
 </html>
