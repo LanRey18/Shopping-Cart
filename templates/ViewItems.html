@@ -16,7 +16,7 @@
         src="https://png.pngtree.com/element_our/20190531/ourmid/pngtree-shopping-cart-convenient-icon-image_1287807.jpg"
         width="30" height="30" class="d-inline-block align-top" alt="">
       Shopping Cart System</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
       aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -54,9 +54,12 @@
               <h6>${{ item.price }}</h6>
 
               <!-- Hidden form to submit order when button is clicked -->
-              <form action="http://127.0.0.1:8000/order" method="POST">
-                <input type="hidden" name="prodId" value="{{ item.prodId }}">
-                <input type="number" name="quantity" value="1" min="1" max="{{item.quantity}}"><br>
+              <form action="order_item" method="POST" id="orderForm">
+
+                <input type="hidden" name="prodId" id="prodId" value="{{ item.prodId }}">
+
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{item.quantity}}"><br>
+
                 <button class="btn btn-primary mt-4" type="submit">Order</button>
               </form>
             </div>
@@ -64,6 +67,46 @@
         </div>
         {% endfor %}
       </div>
+
+      <script>
+            document.getElementById("orderForm").addEventListener("submit", function (event) {
+                event.preventDefault();
+    
+                let prodId = document.getElementById("prodId").value.trim();
+                let quantity = document.getElementById("quantity").value.trim();
+
+                console.log('prodId:', prodId, 'quantity:', quantity);
+    
+                fetch("/order", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        prodId: parseInt(prodId),
+                        quantity: parseInt(quantity)
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Failed to place order.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    alert("Order success!");
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error placing order.");
+                });
+            });
+
+
+
+    </script>
+    
 </body>
 
 </html>
