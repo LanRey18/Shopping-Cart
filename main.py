@@ -71,8 +71,7 @@ def order_item(order_request: OrderRequest):
                     "price": item["price"] * quantity
                 }
                 orders.append(ordered_item)
-                return RedirectResponse("/", status_code=303) 
-            # {"message": "Order successful", "orders": orders, "items" : items}
+                return {"message": "Order successful", "orders": orders, "items" : items}
             else:
                 return {"error": "Insufficient quantity available"}
 
